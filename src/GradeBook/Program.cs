@@ -38,35 +38,41 @@ namespace GradeBook
 
 		private static void EnterGrades(IBook book)
 		{
-			Console.WriteLine("Begin entering Grades or enter \"q\" to finish inputing Grades");
-			var input = Console.ReadLine();
-			while (input != "q")
+			while (true)
 			{
-				try
+				Console.WriteLine("Enter grade or enter \"q\" to finish");
+				var input = Console.ReadLine();
+				if (input != "q")
 				{
-					double grade = double.Parse(input);
-					book.AddGrade(grade);
+					try
+					{
+						double grade = double.Parse(input);
+						book.AddGrade(grade);
+					}
+					catch (ArgumentException e)
+					{
+						Console.WriteLine(e.Message);
+					}
+					catch (FormatException e)
+					{
+						Console.WriteLine(e.Message);
+					}
+					finally
+					{
+						// close a network socket or something if needed at  this point
+					}
 				}
-				catch (ArgumentException e)
+				else
 				{
-					Console.WriteLine(e.Message);
-				}
-				catch (FormatException e)
-				{
-					Console.WriteLine(e.Message);
-				}
-				finally
-				{
-					// close a network socket or something if needed at  this point
+					break;
 				}
 
-				input = Console.ReadLine();
 			}
 		}
 
 		static void OnGradeAdded(object sender, EventArgs e)
 		{
-			Console.WriteLine("event fired: a grade was added");
+			Console.WriteLine("** delegate event fired - a grade was added **");
 		}
 	}
 }
