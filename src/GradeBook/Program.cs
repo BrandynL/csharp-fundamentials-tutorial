@@ -6,7 +6,21 @@ namespace GradeBook
 	{
 		static void Main(string[] args)
 		{
-			IBook book = new DiscBook("Brandyn's grade book");
+			IBook book;
+			System.Console.WriteLine("Enter a gradebook label, such \"[your_name]'s book\" or an example class like \"science\" or \"math\" ( this won't catch exceptions :) )");
+			string bookLabel = Console.ReadLine();
+
+			Console.WriteLine("Enter one of the following\n1: Save grades to file in src directory\n2: Save grades to memory only");
+			string inputBookType = Console.ReadLine();
+			switch (int.Parse(inputBookType))
+			{
+				case int d when d == 1:
+					book = new DiscBook($"{bookLabel} grade book");
+					break;
+				default:
+					book = new InMemoryBook($"{bookLabel} grade book");
+					break;
+			}
 			book.GradeAdded += OnGradeAdded;
 
 			System.Console.WriteLine(book.Name);
@@ -15,7 +29,7 @@ namespace GradeBook
 			EnterGrades(book);
 
 			Statistics stats = book.GetStatistics();
-
+			System.Console.WriteLine($"** {book.Name} Gradebook Statistics **");
 			System.Console.WriteLine($"Average: {stats.Average}");
 			System.Console.WriteLine($"Low: {stats.Low}");
 			System.Console.WriteLine($"High: {stats.High}");
